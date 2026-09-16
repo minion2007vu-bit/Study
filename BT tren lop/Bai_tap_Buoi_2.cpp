@@ -8,18 +8,15 @@
 using namespace std;
  
 class Song{
-    public:
+    private:
         string ID_song;
         string genre;
         string author;
         string date;
         int downloads_count;
         int likes_count;
+        int views_count;
 
-        int views(){
-
-        };
-        
         int streamed_time(){
 
         };
@@ -27,27 +24,31 @@ class Song{
 
 
 class User{
-    public:
+    private:
         string ID_user;
         string username;
         string DOB;
         string region;
         vector<Song> history;
         int listen_time;
-
-        vector<Song> liked_list(){
-
-        };
-
-        vector<Song> downloaded_list(){
-
-        };
-
+        vector<Song> liked_list;
+        vector<Song> downloaded_list;
 
 };
 
+vector<Song> mutual_likes(const User& user_1, const User& user_2){
+    vector<Song> list;
+    for(int i = 0; i < user_1.liked_list.size(); i++){
+        for(int j = 0; j < user_2.liked_list.size(); j++){
+            if (user_1.liked_list[i].ID_song == user_2.liked_list[j].ID_song){
+                list.push_back(user_1.liked_list[i]);
+            }
+        };
+    };
+};
+
 vector<Song> mutual_songs(const User& user_1, const User& user_2){
-    vector<Song> list = {};
+    vector<Song> list;
     for(int i = 0; i < user_1.history.size(); i++){
         for(int j = 0; j < user_2.history.size(); j++){
             if (user_1.history[i].ID_song == user_2.history[j].ID_song){
@@ -58,7 +59,7 @@ vector<Song> mutual_songs(const User& user_1, const User& user_2){
 };
 
 vector<Song> unmutual_songs(const User& user_1, const User& user_2){
-    vector<Song> list = {};
+    vector<Song> list;
     for(int i = 0; i < user_1.history.size(); i++){
         for(int j = 0; j < user_2.history.size(); j++){
             bool match = false;
@@ -71,8 +72,10 @@ vector<Song> unmutual_songs(const User& user_1, const User& user_2){
 };
 
 void User_relation(User user_1, User user_2){
+    float similarity_score = 0;
     vector<Song> mutual_list = mutual_songs(user_1, user_2);
     vector<Song> unmutual_list = unmutual_songs(user_1,user_2);
+    vector<Song> mutual_likes = mutual_songs(user_1, user_2);
     
 };
 
