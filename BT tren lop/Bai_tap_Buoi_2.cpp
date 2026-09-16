@@ -8,7 +8,7 @@
 using namespace std;
  
 class Song{
-    private:
+    public:
         string ID_song;
         string genre;
         string author;
@@ -24,7 +24,7 @@ class Song{
 
 
 class User{
-    private:
+    public:
         string ID_user;
         string username;
         string DOB;
@@ -76,7 +76,7 @@ void User_relation(User user_1, User user_2){
     vector<Song> mutual_list = mutual_songs(user_1, user_2);
     vector<Song> unmutual_list = unmutual_songs(user_1,user_2);
     vector<Song> mutual_likes = mutual_songs(user_1, user_2);
-    
+
 };
 
     
