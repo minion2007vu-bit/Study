@@ -12,12 +12,51 @@ using namespace std;
 class Song{
     public:
         string ID_song;
+        string song_name;
         string genre;
         string author;
         string date;
-        int downloads_count;
-        int likes_count;
-        int views_count;
+        int downloads_count = 0;
+        int likes_count = 0;
+        int views_count = 0;
+
+        string generate_ID_song(){
+            random_device rd;  
+            mt19937 gen(rd()); 
+            uniform_int_distribution<> dis(10000000, 99999999);
+            return to_string(dis(gen));
+        }
+
+        void register_song(){
+            ID_song = generate_ID_song();
+            cout << "Name of the song: ";
+            cin >> song_name;
+            cout << endl;
+            cout << "Date of release: ";
+            cin >> date;
+            cout << endl;
+            cout << "Author: ";
+            cin >> author;
+            cout << endl;
+            cout << "Genre(Pop/Rock/Hip-hop/Jazz/EDM/Classical/Country/R&B): ";
+            cin >> genre;
+            for (char &c : genre) {
+                c = tolower(c);
+            }
+        }
+
+        int listened(){
+            return views_count ++;
+        }
+
+        int liked(){
+            return likes_count ++;
+        }
+
+        int downloaded(){
+            return downloads_count ++;
+        }
+
 };
 
 
@@ -38,7 +77,7 @@ class User{
         unordered_map<string, Song> history_map;
         unordered_map<string, int> listen_times;
 
-        string generate_ID(){
+        string generate_ID_user(){
             random_device rd;  
             mt19937 gen(rd()); 
             uniform_int_distribution<> dis(10000000, 99999999);
@@ -46,7 +85,7 @@ class User{
         }
         
         void register_user(){
-            ID_user = generate_ID();
+            ID_user = generate_ID_user();
             cout << "Create username: ";
             cin >> username;
             cout << endl;
@@ -62,7 +101,6 @@ class User{
                 liked_list.push_back(song);
                 liked_map[song.ID_song] = song;
             }
-            else liked_map.erase(song.ID_song);
         }
 
         void download_song(const Song& song){
