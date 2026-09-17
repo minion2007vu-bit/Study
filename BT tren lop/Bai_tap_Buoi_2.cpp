@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 using namespace std;
  
@@ -25,49 +26,55 @@ class User{
         string username;
         string DOB;
         string region;
-        vector<Song> history;
         int listen_time;
+        
         vector<Song> liked_list;
+        unordered_map<string, Song> liked_map;
+
         vector<Song> downloaded_list;
+        unordered_map<string, Song> downloaded_map;
+
+        vector<Song> history_list;
+        unordered_map<string, Song> history_map;
+
+        void listen_to_song(const Song& song){
+            history_map.insert({song.ID_song, song});
+        }
+
 };
 
 vector<Song> mutual_likes(const User& user_1, const User& user_2){
     vector<Song> list;
     for(int i = 0; i < user_1.liked_list.size(); i++){
-        for(int j = 0; j < user_2.liked_list.size(); j++){
-            if (user_1.liked_list[i].ID_song == user_2.liked_list[j].ID_song){
-                list.push_back(user_1.liked_list[i]);
-                break;
-            }
-        }
+        if(user_2.liked_map.find(user_1.liked_list[i].ID_song) != user_2.liked_map.end())
+            list.push_back(user_1.liked_list[i]);
+    }
+    return list;
+};
+
+vector<Song> mutual_downloaded(const User& user_1, const User& user_2){
+    vector<Song> list;
+    for(int i = 0; i < user_1.downloaded_list.size(); i++){
+        if(user_2.downloaded_map.find(user_1.downloaded_list[i].ID_song) != user_2.downloaded_map.end())
+            list.push_back(user_1.downloaded_list[i]);
     }
     return list;
 };
 
 vector<Song> mutual_songs(const User& user_1, const User& user_2){
     vector<Song> list;
-    for(int i = 0; i < user_1.history.size(); i++){
-        for(int j = 0; j < user_2.history.size(); j++){
-            if (user_1.history[i].ID_song == user_2.history[j].ID_song){
-                list.push_back(user_1.history[i]);
-                break;
-            }
-        }
+    for(int i = 0; i < user_1.history_list.size(); i++){
+        if(user_2.history_map.find(user_1.history_list[i].ID_song) != user_2.history_map.end())
+            list.push_back(user_1.history_list[i]);
     }
     return list;
 };
 
 vector<Song> unmutual_songs(const User& user_1, const User& user_2){
     vector<Song> list;
-    for(int i = 0; i < user_2.history.size(); i++){
-        bool match = false;
-        for(int j = 0; j < user_1.history.size(); j++){
-            if (user_2.history[i].ID_song == user_1.history[j].ID_song){
-                match = true;
-                break;
-            }
-        }
-        if (!match) list.push_back(user_2.history[i]);
+    for(int i = 0; i < user_2.history_list.size(); i++){
+        if(user_1.history_map.find(user_2.history_list[i].ID_song) == user_1.history_map.end())
+            list.push_back(user_2.history_list[i]);
     }
     return list;
 };
@@ -77,6 +84,9 @@ void User_relation(const User& user_1, const User& user_2){
     vector<Song> mutual_list = mutual_songs(user_1, user_2);
     vector<Song> unmutual_list = unmutual_songs(user_1,user_2);
     vector<Song> mutual_likes_list = mutual_likes(user_1, user_2);
+    vector<Song> mutual_downloaded_list = mutual_downloaded(user_1, user_2);
+
+    similarity_score = sizeof(mutual_downloaded_list)*5 + sizeof(mutual_likes_list)*3;
 
 };
 
