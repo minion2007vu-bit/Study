@@ -158,6 +158,16 @@ vector<Song> unmutual_songs(const User& user_1, const User& user_2){
     return list;
 };
 
+vector<Song> unmutual_and_liked_songs(const User& user_1, const User& user_2){
+    vector<Song> list;
+    vector<Song> list_unmutual_1 = unmutual_songs(user_1, user_2);
+    for(int i = 0; i < list_unmutual_1.size(); i++){
+        if(user_2.liked_map.find(list_unmutual_1[i].ID_song) != user_2.liked_map.end())
+            list.push_back(list_unmutual_1[i]);
+    }
+    return list;
+}
+
 bool User_relation(const User& user_1, const User& user_2, float thresh_hold){
     float similarity_score = 0;
     vector<Song> mutual_list = mutual_songs(user_1, user_2);
@@ -165,7 +175,7 @@ bool User_relation(const User& user_1, const User& user_2, float thresh_hold){
     vector<Song> mutual_likes_list = mutual_likes(user_1, user_2);
     vector<Song> mutual_downloaded_list = mutual_downloaded(user_1, user_2);
     
-    similarity_score = mutual_downloaded_list.size()*5 + mutual_likes_list.size()*3 + mutual_songs.size()*0.2;
+    similarity_score = mutual_downloaded_list.size()*5 + mutual_likes_list.size()*3 + mutual_list.size()*0.2;
     
     if(similarity_score >= thresh_hold) return true;
     else return false;
@@ -178,7 +188,7 @@ int main(){
     cin >> thresh_hold;
 // Gợi ý các bài nhạc cho người đạt điều kiện similarity score (chung sở thích) mà user_1 chưa nghe, xếp hạng theo số likes
     if(User_relation(user_1, user_2, thresh_hold)){
-        vector<Song> songs = unmutual_songs(user_1, user_2);
+        vector<Song> songs = unmutual_and_liked_songs(user_1, user_2);
         sort(songs.begin(), songs.end(), [](const Song& a, const Song& b){
             return a.likes_count > b.likes_count;
         });
@@ -189,7 +199,3 @@ int main(){
         }
     }
 }
-
-
-    
-
