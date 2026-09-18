@@ -6,6 +6,9 @@
 #include <vector>
 #include <unordered_map>
 #include <random>
+#include <algorithm>
+#include <cctype>
+#include <string>
 
 using namespace std;
  
@@ -155,16 +158,38 @@ vector<Song> unmutual_songs(const User& user_1, const User& user_2){
     return list;
 };
 
-void User_relation(const User& user_1, const User& user_2){
+bool User_relation(const User& user_1, const User& user_2, float thresh_hold){
     float similarity_score = 0;
     vector<Song> mutual_list = mutual_songs(user_1, user_2);
     vector<Song> unmutual_list = unmutual_songs(user_1,user_2);
     vector<Song> mutual_likes_list = mutual_likes(user_1, user_2);
     vector<Song> mutual_downloaded_list = mutual_downloaded(user_1, user_2);
-
+    
     similarity_score = mutual_downloaded_list.size()*5 + mutual_likes_list.size()*3;
-
+    
+    if(similarity_score >= thresh_hold) return true;
+    else return false;
 };
+
+int main(){
+    Song song1;
+    User user_1, user_2;
+    float thresh_hold;
+    cin >> thresh_hold;
+// Gợi ý các bài nhạc cho người đạt điều kiện similarity score (chung sở thích) mà user_1 chưa nghe, xếp hạng theo số likes
+    if(User_relation(user_1, user_2, thresh_hold)){
+        vector<Song> songs = unmutual_songs(user_1, user_2);
+        sort(songs.begin(), songs.end(), [](const Song& a, const Song& b){
+            return a.likes_count > b.likes_count;
+        });
+        int count = min((int)songs.size(), 10);
+        cout << "Mot so bai hat ban co the thich:"<< endl;
+        for(int i = 0; i < count; i++){
+            cout << songs[i].song_name << endl;
+        }
+    }
+}
+
 
     
 
