@@ -165,7 +165,7 @@ bool User_relation(const User& user_1, const User& user_2, float thresh_hold){
     vector<Song> mutual_likes_list = mutual_likes(user_1, user_2);
     vector<Song> mutual_downloaded_list = mutual_downloaded(user_1, user_2);
     
-    similarity_score = mutual_downloaded_list.size()*5 + mutual_likes_list.size()*3;
+    similarity_score = mutual_downloaded_list.size()*5 + mutual_likes_list.size()*3 + mutual_songs.size()*0.2;
     
     if(similarity_score >= thresh_hold) return true;
     else return false;
