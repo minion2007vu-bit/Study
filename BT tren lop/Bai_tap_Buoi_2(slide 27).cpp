@@ -4,5 +4,16 @@
 
 #include <iostream>
 #include <vector>
-#include <unordered_map>
-#include <random>
+
+using namespace std;
+
+struct Coin_solution{
+    int sum;
+    vector<int> coin_data;
+    int num_of_types;
+
+
+    vector<int> coin_used;
+    vector<int> last_used;
+};
+
