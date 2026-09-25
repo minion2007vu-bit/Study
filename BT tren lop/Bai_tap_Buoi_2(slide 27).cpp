@@ -22,6 +22,7 @@ struct Coin_solution{
         coin_used(limit, -1) {}
 
     vector<int> last_used;
+    vector<int> coin_count;
 
     void find_solution(){
         for( int i = 0; i <= sum; i++){
@@ -42,9 +43,20 @@ struct Coin_solution{
             return;
         }
         else{
-            cout << "So xu toi thieu de duoc tong S la: " << coin_used[sum];
-            
+            cout << "So xu toi thieu de duoc tong S la: " << coin_used[sum] << endl;
+            cout << "Nhung dong xu da dung la: ";
+            for(int i = 0; i < coin_count.size(); i++){
+                cout << coin_count[i] << " ";
+            }
             return;
+        }
+    }
+
+    void trace_back(){
+        int k = sum;
+        while(k){
+            coin_count.push_back(last_used[k]);
+            k = k - coin_data[last_used[k]];
         }
     }
 
